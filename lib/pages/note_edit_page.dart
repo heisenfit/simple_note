@@ -6,7 +6,10 @@ import 'package:simple_note/providers.dart';
 import '../datas/note.dart';
 
 class NoteEditPage extends StatefulWidget {
-  const NoteEditPage({super.key});
+  static const routeName = '/edit';
+  final int? index;
+
+  const NoteEditPage(this.index, {super.key});
 
   @override
   State<NoteEditPage> createState() => _NoteEditPageState();
@@ -16,6 +19,19 @@ class _NoteEditPageState extends State<NoteEditPage> {
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
   Color color = Note.colorDefault;
+
+  @override
+  void initState() {
+    super.initState();
+    final noteIndex = widget.index;
+    if (noteIndex != null) {
+      final note = noteManager().getNote(noteIndex);
+      titleController.text = note.title;
+      bodyController.text = note.body;
+      color = note.color;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,8 +153,20 @@ class _NoteEditPageState extends State<NoteEditPage> {
 
   void _saveNote() {
     if (bodyController.text.isNotEmpty) {
-      noteManager().addNote(
-          Note(bodyController.text, title: titleController.text, color: color));
+      final note =
+          Note(bodyController.text, title: titleController.text, color: color);
+      final noteIndex = widget.index;
+      if (noteIndex != null) {
+        noteManager().updateNote(noteIndex, note);
+      } else {
+        noteManager().addNote(note);
+      }
+
+      // noteManager().addNote(
+      //     Note(bodyController.text,
+      //     title: titleController.text,
+      //     color: color));
+      Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('노트를 입력하세요.'),
