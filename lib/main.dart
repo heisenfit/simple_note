@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_note/pages/note_edit_page.dart';
 import 'package:simple_note/pages/note_list_page.dart';
 
 void main() {
@@ -11,11 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Simple Note',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: const NoteListPage(),
+      home: const NoteEditPage(),
     );
   }
 }
